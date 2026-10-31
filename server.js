@@ -1,11 +1,24 @@
 import app from './app.js';
+import { connectToDb } from './src/db/connect.js';
 
-const PORT= process.env.PORT;
+const PORT = process.env.PORT;
 
 if (!PORT) {
   throw new Error('PORT environment variable is missing');
 }
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://127.0.0.1:${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectToDb();
+    console.log('Connected to MongoDB');
+
+    app.listen(PORT, () => {
+      console.log(`Server running at http://127.0.0.1:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
