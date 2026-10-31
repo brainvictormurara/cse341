@@ -15,5 +15,18 @@ const getAllBooks = async () => {
     .sort({ id: 1 })
     .toArray();
 };
-
-export { getAllBooks };
+const getBookById = async (requestedId) => {
+  return await getDb().collection('books').findOne(
+    { id: requestedId },
+    {
+      projection: {
+        _id: 0,
+        id: 1,
+        author: 1,
+        title: 1,
+        publicationDate: 1
+      }
+    }
+  );
+};
+export { getAllBooks, getBookById };
